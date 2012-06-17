@@ -1,0 +1,51 @@
+pyacter - reductive labs 'facter' interface for python
+
+INTRODUCTION
+
+    This is a very simple abstraction for accessing facter facts.
+
+    Handles some basic option handling to facter. Facter was 1.16 at the time
+    of writing.
+
+ABOUT THIS RELEASE
+
+    This is pyacter 0.1
+
+New since 0.1
+
+    Basic subprocess call to facter.
+
+Bugs fixed since 0.1
+
+    Nothing.
+
+
+REQUIREMENTS
+
+Python 2.4 or later.
+
+
+INSTALLATION
+
+To build and install pyacter, type
+
+    python setup.py install
+
+HOME PAGE
+
+    ...
+
+DOCUMENTATION
+
+Documentation is sparse at the moment.  Use pydoc, or read the HTML
+documentation at the pyacter home page, or download the HTML
+documentation.
+
+BUG REPORTS
+
+Bug reports may be sent to bugs@
+
+MAILING LISTS
+
+A number of mailing lists are available.  Visit the pyacter home
+page to subscribe or unsubscribe.
