@@ -21,8 +21,26 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-"""pyacter facter interface"""
+import sys
+import unittest
 
-__all__ = [
-    'facts',
-]
+sys.path.append("../")
+from pyacter.facts import Facts
+
+
+class PyacterFactSequenceFunctions(unittest.TestCase):
+
+    def test_no_facter(self):
+
+        f = Facts(facter="/no/such/file/facter")
+
+        self.assertTrue(f.gather() == None)
+
+    def test_facter(self):
+
+        f = Facts()
+
+        self.assertTrue(isinstance(f.gather(), dict))
+
+if __name__ == '__main__':
+    unittest.main()
