@@ -24,7 +24,6 @@
 import sys
 import unittest
 
-sys.path.append("../")
 from pyacter.facts import Facts
 
 
@@ -34,13 +33,15 @@ class PyacterFactSequenceFunctions(unittest.TestCase):
 
         f = Facts(facter="/no/such/file/facter")
 
-        self.assertTrue(f.gather() == None)
+        self.assertEqual(f.refresh(), {})
 
     def test_facter(self):
 
         f = Facts()
+        facts = f.refresh()
 
-        self.assertTrue(isinstance(f.gather(), dict))
+        self.assertTrue(isinstance(facts, dict))
+        self.assertTrue(facts.has_key('uptime'))
 
 if __name__ == '__main__':
     unittest.main()

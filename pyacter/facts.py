@@ -27,27 +27,48 @@ import pprint
 
 class Facts(object):
 
+    facts = {}
+    lines = None
+
     def __init__(self, facter='facter'):
         self.real_facter = facter
 
-    def gather(self):
+    def refresh(self):
 
         realbin=self.which(self.real_facter)
         if realbin is None:
-          return None
+          return {}
 
         p = subprocess.Popen([realbin, '-p'], stdout=subprocess.PIPE)
         p.wait()
         self.lines = p.stdout.readlines()
-        return self.expand_facts()
+        self.expand_facts()
+        return self.facts 
 
     def expand_facts(self):
-        res = {}
         for line in self.lines:
             k, v = line.split(' => ')
-            res[k] = v
-        return res
+            self.facts[k] = v
+        return self.facts
 
+    def filter_facts(self, key_filter=None):
+        """ Create a new array by filtering the keys. 
+
+            key_filter  an array of compiled regex
+        """
+        filtered = {}
+        for k, v in self.facts.iteritems():
+            if key_filter is None \
+                    or self.key_filter(k, key_filter):
+                filtered[k] = v
+        return filtered
+
+    def key_filter(self, key, key_filter):
+        for regex in key_filter:
+            if regex.search(key):
+                return True
+        return False
+    
     def which(self, program):
         def is_exe(fpath):
             return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
@@ -66,4 +87,5 @@ class Facts(object):
 
 if __name__ == "__main__":
     facts = Facts()
-    pprint.pprint(facts.gather())
+
+    pprint.pprint(facts.refresh())

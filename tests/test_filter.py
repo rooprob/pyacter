@@ -21,12 +21,42 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-PYTHON=python
+import re
+import sys
+import unittest
 
-check: test
+sys.path.append("../")
+from pyacter.facts import Facts
 
-test:
-	@for i in *.py; do \
-		echo "Running $$i:"; \
-		${PYTHON} $$i || exit 1; \
-	done
+
+class PyacterFactSequenceFunctions(unittest.TestCase):
+
+    def test_fetch_all(self):
+
+        f = Facts()
+        g = f.refresh()
+
+        self.assertTrue(isinstance(g, dict))
+        self.assertTrue(g.has_key('architecture'))
+        self.assertTrue(g.has_key('ipaddress'))
+        self.assertTrue(g.has_key('fqdn'))
+
+    def test_fetch_filter(self):
+
+        f = Facts()
+
+        key_filter = [
+            re.compile(r"arch"),
+            re.compile(r"fqdn"),
+            re.compile(r"ip"),
+        ]
+        g = f.refresh()
+        filtered = f.filter_facts(key_filter=key_filter)
+
+        self.assertTrue(isinstance(filtered, dict))
+        self.assertTrue(filtered.has_key('architecture'))
+        self.assertTrue(filtered.has_key('ipaddress'))
+        self.assertTrue(filtered.has_key('fqdn'))
+
+if __name__ == '__main__':
+    unittest.main()

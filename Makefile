@@ -29,6 +29,8 @@ all:
 install:
 	${PYTHON} ./setup.py install
 
+test:
+	${PYTHON} -m unittest discover -s tests
 clean:
 	${PYTHON} ./setup.py clean --all
 	find . -name '*.pyc' -exec rm {} \;
