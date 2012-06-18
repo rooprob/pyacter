@@ -54,14 +54,17 @@ class Facter(object):
             res[k] = v
         return res
 
-    def filter_facts(self, key_filter=None):
+    def facts(self, key_filter=None):
         """ Create a new array by filtering the keys. 
 
             key_filter  an array of compiled regex
         """
         if not Facter.__FACTER_HANDLER__:
             self.refresh()
-            
+    
+        if not Facter.__FACTER_HANDLER__:
+            return {}
+
         filtered = {}
         for k, v in Facter.__FACTER_HANDLER__.facts.iteritems():
             if key_filter is None \

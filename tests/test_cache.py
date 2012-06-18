@@ -21,41 +21,28 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import re
 import sys
 import unittest
 
-sys.path.append("../")
 from pyacter.facter import Facter
 
 
-class PyacterFactSequenceFunctions(unittest.TestCase):
+class PyacterFactCacheFunctions(unittest.TestCase):
 
-    def test_fetch_all(self):
+    def test_cache_facter(self):
 
-        f = Facter()
-        facts = f.facts()
+        f1 = Facter()
+        f2 = Facter()
+        f1facts = f1.facts()
+        f2facts = f2.facts()
 
-        self.assertTrue(isinstance(facts, dict))
-        self.assertTrue(facts.has_key('architecture'))
-        self.assertTrue(facts.has_key('ipaddress'))
-        self.assertTrue(facts.has_key('fqdn'))
+        self.assertEqual(f1facts['fqdn'], f2facts['fqdn'])
 
-    def test_fetch_filter(self):
+        self.assertTrue(Facter.__FACTER_HANDLER__)
+        f1.clear()
 
-        f = Facter()
+        self.assertFalse(Facter.__FACTER_HANDLER__)
 
-        key_filter = [
-            re.compile(r"arch"),
-            re.compile(r"fqdn"),
-            re.compile(r"ip"),
-        ]
-        filtered = f.facts(key_filter=key_filter)
-
-        self.assertTrue(isinstance(filtered, dict))
-        self.assertTrue(filtered.has_key('architecture'))
-        self.assertTrue(filtered.has_key('ipaddress'))
-        self.assertTrue(filtered.has_key('fqdn'))
 
 if __name__ == '__main__':
     unittest.main()

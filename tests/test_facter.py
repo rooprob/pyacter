@@ -32,12 +32,12 @@ class PyacterFactSequenceFunctions(unittest.TestCase):
     def test_00_no_facter(self):
 
         f = Facter(facter="/no/such/file/facter")
-        self.assertEqual(f.refresh(), {})
+        self.assertEqual(f.facts(), {})
 
     def test_01_facter(self):
 
         f = Facter()
-        facts = f.refresh()
+        facts = f.facts()
 
         self.assertTrue(isinstance(facts, dict))
         self.assertTrue(facts.has_key('uptime'))
