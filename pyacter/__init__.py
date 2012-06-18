@@ -24,5 +24,5 @@
 """pyacter facter interface"""
 
 __all__ = [
-    'facts',
+    'facter',
 ]

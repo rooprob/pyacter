@@ -24,20 +24,19 @@
 import sys
 import unittest
 
-from pyacter.facts import Facts
+from pyacter.facter import Facter
 
 
 class PyacterFactSequenceFunctions(unittest.TestCase):
 
-    def test_no_facter(self):
+    def test_00_no_facter(self):
 
-        f = Facts(facter="/no/such/file/facter")
-
+        f = Facter(facter="/no/such/file/facter")
         self.assertEqual(f.refresh(), {})
 
-    def test_facter(self):
+    def test_01_facter(self):
 
-        f = Facts()
+        f = Facter()
         facts = f.refresh()
 
         self.assertTrue(isinstance(facts, dict))

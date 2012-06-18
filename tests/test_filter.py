@@ -26,31 +26,31 @@ import sys
 import unittest
 
 sys.path.append("../")
-from pyacter.facts import Facts
+from pyacter.facter import Facter
 
 
 class PyacterFactSequenceFunctions(unittest.TestCase):
 
     def test_fetch_all(self):
 
-        f = Facts()
-        g = f.refresh()
+        f = Facter()
+        facts = f.refresh()
 
-        self.assertTrue(isinstance(g, dict))
-        self.assertTrue(g.has_key('architecture'))
-        self.assertTrue(g.has_key('ipaddress'))
-        self.assertTrue(g.has_key('fqdn'))
+        self.assertTrue(isinstance(facts, dict))
+        self.assertTrue(facts.has_key('architecture'))
+        self.assertTrue(facts.has_key('ipaddress'))
+        self.assertTrue(facts.has_key('fqdn'))
 
     def test_fetch_filter(self):
 
-        f = Facts()
+        f = Facter()
 
         key_filter = [
             re.compile(r"arch"),
             re.compile(r"fqdn"),
             re.compile(r"ip"),
         ]
-        g = f.refresh()
+        facts = f.refresh()
         filtered = f.filter_facts(key_filter=key_filter)
 
         self.assertTrue(isinstance(filtered, dict))

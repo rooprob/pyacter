@@ -25,8 +25,8 @@ import os
 import subprocess
 import pprint
 
-class Facts(object):
-
+class Facter(object):
+    __FACTER_HANDLER__ = None
     facts = {}
     lines = None
 
@@ -34,30 +34,36 @@ class Facts(object):
         self.real_facter = facter
 
     def refresh(self):
+        if not Facter.__FACTER_HANDLER__:
+            print "refresh, fetching"
+            realbin=self.which(self.real_facter)
+            if realbin is None:
+              return {}
 
-        realbin=self.which(self.real_facter)
-        if realbin is None:
-          return {}
-
-        p = subprocess.Popen([realbin, '-p'], stdout=subprocess.PIPE)
-        p.wait()
-        self.lines = p.stdout.readlines()
-        self.expand_facts()
-        return self.facts 
+            p = subprocess.Popen([realbin, '-p'], stdout=subprocess.PIPE)
+            p.wait()
+            self.lines = p.stdout.readlines()
+            self.facts = self.expand_facts()
+            Facter.__FACTER_HANDLER__ = self
+        return Facter.__FACTER_HANDLER__.facts
 
     def expand_facts(self):
+        res = {}
         for line in self.lines:
             k, v = line.split(' => ')
-            self.facts[k] = v
-        return self.facts
+            res[k] = v
+        return res
 
     def filter_facts(self, key_filter=None):
         """ Create a new array by filtering the keys. 
 
             key_filter  an array of compiled regex
         """
+        if not Facter.__FACTER_HANDLER__:
+            self.refresh()
+            
         filtered = {}
-        for k, v in self.facts.iteritems():
+        for k, v in Facter.__FACTER_HANDLER__.facts.iteritems():
             if key_filter is None \
                     or self.key_filter(k, key_filter):
                 filtered[k] = v
@@ -85,7 +91,10 @@ class Facts(object):
 
         return None
 
-if __name__ == "__main__":
-    facts = Facts()
+    def clear(self):
+        Facter.__FACTER_HANDLER__ = None
 
-    pprint.pprint(facts.refresh())
+if __name__ == "__main__":
+    facter = Facter()
+
+    pprint.pprint(facter.refresh())
