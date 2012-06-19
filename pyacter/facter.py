@@ -69,7 +69,7 @@ class Facter(object):
         for k, v in Facter.__FACTER_HANDLER__.facts.iteritems():
             if key_filter is None \
                     or self.key_filter(k, key_filter):
-                filtered[k] = v
+                filtered[k.strip()] = v.strip()
         return filtered
 
     def key_filter(self, key, key_filter):
