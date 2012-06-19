@@ -35,7 +35,6 @@ class Facter(object):
 
     def refresh(self):
         if not Facter.__FACTER_HANDLER__:
-            print "refresh, fetching"
             realbin=self.which(self.real_facter)
             if realbin is None:
               return {}
