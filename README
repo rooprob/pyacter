@@ -27,10 +27,49 @@ LICENSE
 
 INTRODUCTION
 
-    This is a very simple abstraction for accessing facter facts.
+    This is a very simple abstraction for accessing facter facts. Facter is a
+    simple key=value interface to many system facts. The value is currently
+    only a string type.
 
-    Handles some basic option handling to facter. Facter was 1.16 at the time
-    of writing.
+    Facter was 1.16 at the time of writing.
+
+    Gathers the facts into a singleton (to avoid multiple lengthy calls to
+    facter). Adds support for filtering. Returns a dictionary containing keys.
+
+
+        from pyacter.facter import Facter
+        import pprint
+        import re
+
+        class MyFacter(Facter):
+            def facts(self):
+                return super(MyFacter, self).facts(key_filter=self.my_filter)
+
+        class ThingFacts(MyFacter):
+            my_filter=[
+                re.compile(r"^kernel"),
+                re.compile(r"^inter"),
+                re.compile(r"someprefix_"),
+                re.compile(r"someotherprefix_"),
+            ]
+
+
+        if __name__ == "__main__":
+
+            thing_facter = ThingFacts()
+
+            pprint.pprint(thing_facter.facts())
+
+        $ PYTHONPATH=. python example/example.py 
+        {'interfaces': 'lo0,gif0,stf0,en0,p2p0',
+         'kernel': 'Darwin',
+         'kernelmajversion': '11.4',
+         'kernelrelease': '11.4.0',
+         'kernelversion': '11.4.0'}
+
+        also see the (sparse) testing directory.
+
+
 
 ABOUT THIS RELEASE
 
@@ -62,15 +101,12 @@ HOME PAGE
 
 DOCUMENTATION
 
-Documentation is sparse at the moment.  Use pydoc, or read the HTML
-documentation at the pyacter home page, or download the HTML
-documentation.
+Documentation is sparse at the moment.
 
 BUG REPORTS
 
-Bug reports may be sent to bugs@
+Bug reports may be sent to the author.
 
 MAILING LISTS
 
-A number of mailing lists are available.  Visit the pyacter home
-page to subscribe or unsubscribe.
+None.
