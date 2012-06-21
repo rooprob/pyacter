@@ -3,7 +3,9 @@ ChangeLog
 LICENSE
 README
 setup.py
+example/example.py
 pyacter/__init__.py
-pyacter/facts.py
-tests/Makefile
+pyacter/facter.py
+tests/test_cache.py
 tests/test_facter.py
+tests/test_filter.py
