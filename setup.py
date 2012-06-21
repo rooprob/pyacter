@@ -38,7 +38,6 @@ kwargs = {
         "Intended Audience :: Developers",
         "Intended Audience :: System Administrators",
         "License :: Freeware",
-        "Operating System :: Microsoft :: Windows :: Windows 95/98/2000",
         "Operating System :: POSIX",
         "Programming Language :: Python",
         "Topic :: Software Development :: Libraries :: Python Modules",
